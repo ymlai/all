@@ -1,7 +1,7 @@
 var app = angular.module('plunker', []);
 
 app.controller('MainCtrl', function($scope) {
-  $scope.allUnSelected=false;
+  $scope.buttonOk=false;
   $scope.allSelected = false;
   
   $scope.checkboxes = [{
@@ -20,19 +20,19 @@ app.controller('MainCtrl', function($scope) {
 
   $scope.cbChecked = function(){
     $scope.allSelected = true;
-    $scope.allUnSelected = false;
+    $scope.buttonOk = false;
     angular.forEach($scope.checkboxes, function(v, k) {
       if(!v.checked){
         $scope.allSelected = false;
       }
-      if (v.checked){
-        $scope.allUnSelected = true;
+      else{
+        $scope.buttonOk = true;
       } 
     });
   }
   
   $scope.toggleAll = function() {
-    $scope.allUnSelected=!$scope.allUnSelected
+    $scope.buttonOk=!$scope.buttonOk
     var bool = true;
     if ($scope.allSelected) {
       bool = false;
@@ -40,9 +40,6 @@ app.controller('MainCtrl', function($scope) {
     angular.forEach($scope.checkboxes, function(v, k) {
       v.checked = !bool;
       $scope.allSelected = !bool;
-      if (v.checked) {
-        $scope.tryit = false;
-      }
     });
   }
 
