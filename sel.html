@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+<head>
+  <meta charset="utf-8" />
+  <title>AngularJS Plunker</title>
+  <script>
+    document.write('<base href="' + document.location + '" />');
+  </script>
+  <link rel="stylesheet" href="style.css" />
+  <script data-require="angular.js@1.3.x" src="https://code.angularjs.org/1.3.6/angular.js" data-semver="1.3.6"></script>
+  <script src="app.js"></script>
+</head>
+
+<body ng-controller="MainCtrl">
+  
+  
+  <div>
+  
+    <label><input type="checkbox" ng-model="allSelected" ng-click="toggleAll()" />
+    <span ng-show="allSelected" >All Selected</span>
+    <span ng-hide="allSelected" >Select All</span>
+    </label>
+    
+  </div>
+  <div ng-repeat="cb in checkboxes">
+    <label><input type="checkbox" ng-model="cb.checked" ng-click="cbChecked()"/>
+    {{cb.label}}
+      
+    </label>
+  </div>
+  
+  <pre>{{checkboxes}}</pre>
+  {{allUnSelected}}
+  <button  ng-disabled="!allUnSelected" >button</button>
+</body>
+
+</html>
