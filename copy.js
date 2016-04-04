@@ -36,7 +36,7 @@ app.controller('myCtrl', function($scope,$window) {
     model.rec = {};  
     model.rec.name= [{nameType:"type1" ,value:'Chan'},{nameType:"type1" ,value:'Chan'}];
     model.rec.sancationList = [{catgory: 'catgory01', reference: 'sancation01'},{catgory: 'catgory02', reference: 'sancation02'}];
-    model.rec.date = [{day: '01', month: '03', year:'1991'},{day: '01', month: '02', year:'1991'}];
+    model.rec.date = [{dateType:"AA", day: '01', month: '03', year:'1991'},{dateType:"BB", day: '01', month: '02', year:'1991'}];
     model.rec.identification = [{idType: 'hk', id: '1'},{idType: 'hk', id: '01'}];
     model.rec.country = [{type: 'asian', value: 'sg'}, {type: 'asian', value: 'hk'}];
 
@@ -55,11 +55,12 @@ app.controller('myCtrl', function($scope,$window) {
 
     model.createDateCheckList = function(recordMap){
       for(i=0; i<recordMap.length; i++){
-          model.pushCheckDateList(recordMap[i]['day'],recordMap[i]['month'], recordMap[i]['year']);}}
+          model.pushCheckDateList(recordMap[i]['dateType'], recordMap[i]['day'], recordMap[i]['month'], recordMap[i]['year']);}}
 
 
-    model.pushCheckDateList = function (day, month, year) {
+    model.pushCheckDateList = function (dateType, day, month, year) {
     tempMap={};
+    tempMap['dayType']=dateType;
     tempMap['day']=day;
     tempMap['month']=month;
     tempMap['year']=year;
@@ -114,4 +115,5 @@ app.controller('myCtrl', function($scope,$window) {
 </script>
 
 </body>
-</html> 
+</html>
+
