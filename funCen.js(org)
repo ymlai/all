@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+{{rec}}
+<br>
+<br>
+Name:{{checkNameList}}{{nameFlag}}
+<br>
+<br>
+sancationList:{{checkSacList}}{{sacFlag}}
+<br>
+<br>
+id:{{checkIdList}}{{idFlag}}
+<br>
+<br>
+country:{{checkCountryList}}{{countryFlag}}
+<br>
+<br>
+date:{{checkDateList}}{{dateFlag}}
+<br>
+<br>
+{{msg}}
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope,$window) {
+    $scope.Duplicate =false;
+    $scope.checkNameList = [];
+    $scope.checkSacList = [];
+    $scope.checkDateList =[];
+    $scope.checkIdList = [];
+    $scope.rec = {};  
+    $scope.rec.name= [{nameType:"type1" ,value:'Chan'},{nameType:"type1" ,value:'Chan'}];
+    $scope.rec.sancationList = [{catgory: 'catgory01', reference: 'sancation01'},{catgory: 'catgory02', reference: 'sancation02'}];
+    $scope.rec.date = [{day: '01', month: '03', year:'1991'},{day: '01', month: '02', year:'1991'}];
+    $scope.rec.identification = [{idType: 'hk', id: '1'},{idType: 'hk', id: '01'}];
+    $scope.rec.country = [{type: 'asian', value: 'sg'}, {type: 'asian', value: 'hk'}];
+
+
+    //param: record collection(arrayList), key of the type in grid table(string), key of the value in grid table(string) 
+    
+   $scope.createCheckList = function(recordMap, checkList, keyOfType, keyOfValue){
+      for(i=0; i<recordMap.length; i++){
+          $scope.pushCheckList(recordMap[i][keyOfType],recordMap[i][keyOfValue], checkList);}}
+
+    $scope.pushCheckList = function (type, value, checkList) {
+    tempMap={};
+    tempMap[type]=value;
+    checkList.push(tempMap);
+    };
+
+    $scope.createDateCheckList = function(recordMap){
+      for(i=0; i<recordMap.length; i++){
+          $scope.pushCheckDateList(recordMap[i]['day'],recordMap[i]['month'], recordMap[i]['year']);}}
+
+
+    $scope.pushCheckDateList = function (day, month, year) {
+    tempMap={};
+    tempMap['day']=day;
+    tempMap['month']=month;
+    tempMap['year']=year;
+    $scope.checkDateList.push(tempMap);
+    };
+
+    $scope.checkDuplicate = function(collection){
+     var duplicate=false;
+     for(i=0; i<collection.length; i++)
+       {for (j=i+1; j<collection.length; j++)
+         {if(angular.equals(collection[i],collection[j]) && !(angular.equals(collection[i],{})))
+            {duplicate=true;
+            break;}
+         }
+       }
+      return duplicate;
+     }; 
+ 
+    $scope.save = function(){
+      $scope.checkNameList = [];
+      $scope.checkSacList = [];
+      $scope.checkDateList =[];
+      $scope.checkIdList = [];
+      $scope.checkCountryList = [];
+
+      $scope.createCheckList($scope.rec.name, $scope.checkNameList, 'nameType', 'value');
+      $scope.nameFlag=$scope.checkDuplicate($scope.checkNameList);
+
+      $scope.createCheckList($scope.rec.sancationList, $scope.checkSacList, 'catgory', 'reference');
+      $scope.sacFlag=$scope.checkDuplicate($scope.checkSacList);
+
+      $scope.createCheckList($scope.rec.identification, $scope.checkIdList, 'idType', 'id');
+      $scope.idFlag=$scope.checkDuplicate($scope.checkIdList);
+
+      $scope.createCheckList($scope.rec.country, $scope.checkCountryList, 'type', 'value');
+      $scope.countryFlag=$scope.checkDuplicate($scope.checkCountryList);
+
+      $scope.createDateCheckList($scope.rec.date);
+      $scope.dateFlag=$scope.checkDuplicate($scope.checkDateList);  
+
+      if ( $scope.nameFlag || $scope.sacFlag || $scope.idFlag || $scope.dateFlag)
+         $scope.msg = "edit unsuccessfully";
+      else 
+         $scope.msg = "edit successfully";
+      };
+  
+      $scope.save();
+
+
+
+});
+</script>
+
+</body>
+</html>
