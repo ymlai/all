@@ -4,48 +4,66 @@
 <body>
 
 <div ng-app="myApp" ng-controller="myCtrl">
-
+{{rec}}
+<br>
+<br>
 {{checkNameList}}{{nameFlag}}
+<br>
 <br>
 {{checkSacList}}{{sacFlag}}
 <br>
+<br>
+{{checkIdList}}{{idFlag}}
+<br>
+<br>
 {{checkDateList}}{{dateFlag}}
+<br>
+<br>
+{{msg}}
 </div>
 
 <script>
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope,$window) {
-    $scope.Duplicate =false;
-    $scope.checkNameList = [];
-    $scope.checkSacList = [];
-    $scope.checkDateList =[];
+    model.Duplicate =false;
+    model.checkNameList = [];
+    model.checkSacList = [];
+    model.checkDateList =[];
+    model.checkIdList = [];
+    model.rec = {};  
+    model.rec.name= [{nameType:"type1" ,value:'Chan'},{nameType:"type2" ,value:'Chan2'}];
+    model.rec.sancationList = [{catgory: 'catgory01', reference: 'sancation01'},{catgory: 'catgory02', reference: 'sancation02'}];
+    model.rec.date = [{day: '01', month: '03', year:'1991'},{day: '01', month: '02', year:'1991'}];
+    model.rec.identification = [{idType: 'hk', id: '1'},{idType: 'hk', id: '01'}];
+
+
+
     //param: record collection(arrayList), key of the type in grid table(string), key of the value in grid table(string) 
     
-   $scope.createCheckList = function(recordMap, checkList, keyOfType, keyOfValue){
-      for(i=0; i<recordMap[keyOfType].length; i++){
-          $scope.pushCheckList(recordMap[keyOfType][i][keyOfType],recordMap[keyOfValue][i][keyOfValue], checkList);}}
+   model.createCheckList = function(recordMap, checkList, keyOfType, keyOfValue){
+      for(i=0; i<recordMap.length; i++){
+          model.pushCheckList(recordMap[i][keyOfType],recordMap[i][keyOfValue], checkList);}}
 
-
-    $scope.pushCheckList = function (type, value, checkList) {
+    model.pushCheckList = function (type, value, checkList) {
     tempMap={};
     tempMap[type]=value;
     checkList.push(tempMap);
     };
 
-    $scope.createDateCheckList = function(recordMap){
-      for(i=0; i<recordMap['Date'].length; i++){
-          $scope.pushCheckDateList(recordMap['Date'][i]['day'],recordMap['Date'][i]['month'], recordMap['Date'][i]['year']);}}
+    model.createDateCheckList = function(recordMap){
+      for(i=0; i<recordMap.length; i++){
+          model.pushCheckDateList(recordMap[i]['day'],recordMap[i]['month'], recordMap[i]['year']);}}
 
 
-    $scope.pushCheckDateList = function (day, month, year) {
+    model.pushCheckDateList = function (day, month, year) {
     tempMap={};
     tempMap['day']=day;
     tempMap['month']=month;
     tempMap['year']=year;
-    $scope.checkDateList.push(tempMap);
+    model.checkDateList.push(tempMap);
     };
 
-    $scope.checkDuplicate = function(collection){
+    model.checkDuplicate = function(collection){
      var duplicate=false;
      for(i=0; i<collection.length; i++)
        {for (j=i+1; j<collection.length; j++)
@@ -56,22 +74,33 @@ app.controller('myCtrl', function($scope,$window) {
        }
       return duplicate;
      }; 
+ 
+    model.save = function(){
+      model.Duplicate =false;
+      model.checkNameList = [];
+      model.checkSacList = [];
+      model.checkDateList =[];
+      model.checkIdList = [];
+      model.createCheckList(model.rec.name, model.checkNameList, 'nameType', 'value');
+      model.nameFlag=model.checkDuplicate(model.checkNameList);
+      model.createCheckList(model.rec.sancationList, model.checkSacList, 'catgory', 'reference');
+      model.sacFlag=model.checkDuplicate(model.checkSacList);
+      model.createCheckList(model.rec.identification, model.checkIdList, 'idType', 'id');
+      model.idFlag=model.checkDuplicate(model.checkIdList);
+      model.createDateCheckList(model.rec.date);
+      model.dateFlag=model.checkDuplicate(model.checkDateList);  
+      if ( model.nameFlag || model.sacFlag || model.idFlag || model.dateFlag)
+         model.msg = "edit unsuccessfully";
+      else 
+         model.msg = "edit successfully";
+      };
+  
+      model.save();
 
-    $scope.rec = {};  
-    $scope.rec.Name= [{Name: 'Chan1'},{Name: 'Chan'}];
-    $scope.rec.primaryName= [{primaryName: 'primaryT2'},{primaryName: 'primaryT2'}];
-    $scope.rec.sancation = [{sancation: 'ABC'},{sancation: 'ABC'}];
-    $scope.rec.Date = [{day: '01', month: '02', year:'1991'},{day: '01', month: '02', year:'1991'}];
 
-    $scope.createCheckList($scope.rec, $scope.checkNameList, 'primaryName', 'Name');
-    $scope.nameFlag=$scope.checkDuplicate($scope.checkNameList);
-    $scope.createCheckList($scope.rec, $scope.checkSacList, 'sancation', 'sancation');
-    $scope.sacFlag=$scope.checkDuplicate($scope.checkSacList);
-    $scope.createDateCheckList($scope.rec);
-    $scope.dateFlag=$scope.checkDuplicate($scope.checkDateList);
 
 });
 </script>
 
 </body>
-</html>
+</html> 
