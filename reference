@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="customersCtrl"> 
+
+
+<table>
+  <tr ng-repeat="x in names">
+    <td>{{ x.Name }}
+      <span>
+          <button ng-click="nameFlag=!nameFlag; flagT($index)">hi{{nameFlag}}{{$index}}</button></span>
+      <span ng-click="nameFlag=!nameFlag; flagF($index)">
+               <button>bye</button></span>
+    </td>
+    <td>{{ x.Country }}</td>
+  </tr>
+<tr><td>{{nameEdit}}</td></tr>
+</table>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+    $http.get("http://www.w3schools.com/angular/customers.php")
+    .then(function (response) {$scope.names = response.data.records;});
+
+$scope.count = 0;
+$scope.nameFlag=false;
+$scope.nameEdit={};
+$scope.refreshFlag = function () {
+     $scope.nameEdit[i]=false;
+}
+
+for (i=0; i<15; i++){
+      $scope.nameEdit[i]=false;
+        }
+
+$scope.flagT = function(i){
+     $scope.nameEdit[i]=true;
+}
+
+$scope.flagF = function(i){
+     $scope.nameEdit[i]=false;
+}
+
+
+
+});
+</script>
+
+</body>
+</html>
