@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br>
+<br>
+list: {{list}}
+<br>
+tmp: {{tmp}}
+<br>
+tmp: {{tmpName}}
+<br>
+{{a}}
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    
+    $scope.list = {'a':1, 'b':2, 'name':[]};
+    $scope.list.name = [{'name':"John", 'add':'hk', 'B':'D',"AAA":'hk'},{'name':"Jim", 'add':'kln', 'B':'U', 'i':true}];
+    
+
+$scope.cleanRecord = function(record){
+    var tmp=[];
+    var cleanList=[]; 
+    for (i=0 ; i<record.length; i++){
+        if (record[i]['B'] !=="D"){
+            tmp = angular.copy(record[i]);         
+            delete tmp['B'];
+            delete tmp['i'];
+            delete tmp['o'];
+            cleanList.push(tmp);   
+       }  
+     }
+      return cleanList;
+}
+$scope.list.name = $scope.cleanRecord($scope.list.name);
+});
+</script>
+
+</body>
+</html>
